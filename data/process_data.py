@@ -64,7 +64,7 @@ def main():
 
     """
     Main function will start data processing functions. There are three primary steps taken in this function:
-        1) Load Messages Data with Categories
+        1) Load Message and Category Data and combine data
         2) Clean Combined Message and Catagories Data
         3) Save Data to SQLite Database
     """
