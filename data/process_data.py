@@ -6,12 +6,29 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    Load Messages Data with Categories Function
+    
+    Parameters:
+        messages_filepath: Path to the CSV file containing messages
+        categories_filepath: Path to the CSV file containing categories
+    Output:
+        df: Combined data containing messages and categories
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, left_on='id', right_on='id', how='inner')
     return df
     
 def clean_data(df):
+    """
+    Clean Categories Data Function
+    
+    Parameters:
+        df: Combined data containing messages and categories
+    Outputs:
+        df: Combined data containing messages and categories with categories cleaned up
+    """
     categories = df["categories"].str.split(';', expand = True)
     col_names = categories.iloc[0,:].apply(lambda x: x.split('-')[0])
     categories.columns = col_names
@@ -32,11 +49,25 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    """
+    Save Data to SQLite Database Function
+    
+    Arguments:
+        df: Combined data containing messages and categories with categories cleaned up
+        database_filename: Path to SQLite destination database
+    """
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('Disaster_Response', engine, index=False, if_exists = 'replace')
 
 
 def main():
+
+    """
+    Main function will start data processing functions. There are three primary steps taken in this function:
+        1) Load Messages Data with Categories
+        2) Clean Combined Message and Catagories Data
+        3) Save Data to SQLite Database
+    """
     
     messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
     
